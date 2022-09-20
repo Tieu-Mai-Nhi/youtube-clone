@@ -13,7 +13,6 @@ const Home = () => {
                 <Card />
                 <Card />
                 <Card />
-                <Card />
             </ScrollView>
         </View>
     )

@@ -1,8 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
-import { useEffect } from "react";
 import { SafeAreaView, StatusBar, StyleSheet } from "react-native";
-import Header from "./src/components/Header";
 import Home from "./src/screens/Home";
 import Library from "./src/screens/Library";
 import Shorts from "./src/screens/Shorts";
