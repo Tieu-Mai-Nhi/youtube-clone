@@ -1,9 +1,12 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import React from 'react';
 import { Image, SafeAreaView, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 const Header = () => {
+
+    const navigation = useNavigation();
 
     return (
         <SafeAreaView style={styles.header}>
@@ -27,7 +30,7 @@ const Header = () => {
                         <MaterialCommunityIcons name="bell-outline" size={24} color="black" />
                     </TouchableOpacity>
                     <TouchableOpacity>
-                        <MaterialIcons name="search" size={24} color="black" />
+                        <MaterialIcons name="search" size={24} color="black" onPress={() => navigation.navigate('Search')} />
                     </TouchableOpacity>
                     <TouchableOpacity>
                         <MaterialIcons name="account-circle" size={24} color="black" />

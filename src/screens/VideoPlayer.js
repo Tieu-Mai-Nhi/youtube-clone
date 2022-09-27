@@ -1,14 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import Header from '../components/Header'
 
-export default function Library() {
+const VideoPlayer = () => {
     return (
         <View>
-            <Header />
-            <Text>Library</Text>
+            <Text>VideoPlayer</Text>
         </View>
     )
 }
+
+export default VideoPlayer
 
 const styles = StyleSheet.create({})

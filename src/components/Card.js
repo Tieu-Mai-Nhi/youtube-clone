@@ -1,14 +1,14 @@
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 
-const Card = () => {
+const Card = (props) => {
     return (
         <View style={styles.card}>
             <TouchableOpacity>
                 <Image
                     style={styles.imageCard}
                     source={{
-                        uri: 'https://getwallpapers.com/wallpaper/full/8/1/9/97620.jpg',
+                        uri: `https://i.ytimg.com/vi/${props.videoId}/hqdefault.jpg`,
                     }}
                 />
             </TouchableOpacity>
@@ -18,7 +18,7 @@ const Card = () => {
             <View style={{ flexDirection: 'row', alignItems: 'center', position: 'relative', marginBottom: 20, marginTop: 14 }}>
                 <Image source={require('../../assets/image/fon-devushka-volosy-vzgliad-milaia.jpg')} style={styles.avt} />
                 <View style={{ flex: 1 }}>
-                    <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">Heart Touching Nasheed #ShortsHeart Touching Nasheed #ShortsHeart Touching Nasheed #ShortsHeart Touching Nasheed #Shorts</Text>
+                    <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">{props.title}</Text>
                     <Text style={styles.viewer}>19,210,251 viewsJul • 1, 2016</Text>
                 </View>
                 <Image source={require('../../assets/icon/More.png')} style={styles.more} />
@@ -30,7 +30,9 @@ const Card = () => {
 export default Card
 
 const styles = StyleSheet.create({
-    card: {},
+    card: {
+        flex: 1
+    },
 
     imageCard: {
         width: '100%',

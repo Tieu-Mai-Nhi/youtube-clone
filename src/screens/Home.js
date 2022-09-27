@@ -1,19 +1,18 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { StyleSheet, View } from 'react-native'
 import Header from '../components/Header'
-import Card from '../components/Card'
 
 const Home = () => {
     return (
         <View>
             <Header />
-            <ScrollView>
+            {/* <ScrollView>
                 <Card />
                 <Card />
                 <Card />
                 <Card />
                 <Card />
-            </ScrollView>
+            </ScrollView> */}
         </View>
     )
 }
