@@ -3,9 +3,9 @@ import React from 'react'
 import { Feather } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 
-const SubItemSearch = ({ text, onSetText, onNavigationSearch }) => {
+const SubItemSearch = ({ text, onSetText, onNavigationSearch, onSaveWord }) => {
     return (
-        <Pressable style={styles.container} onPress={onNavigationSearch}>
+        <Pressable style={styles.container} onPress={onNavigationSearch} onPressIn={onSaveWord}>
             {/* <Feather name="clock" size={24} color="black" /> */}
             <AntDesign name="search1" size={24} color="black" />
 

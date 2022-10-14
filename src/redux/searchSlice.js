@@ -24,6 +24,9 @@ const searchSlice = createSlice({
             .addCase(fetchSearch.fulfilled, (state, action) => {
                 // console.log('Extra.action.payload.searchSlice: ', action.payload);
                 state.status = 'idle';
+                state.listVideoSearch = [];
+                state.listChannelSearch = [];
+                state.listPlaylistSearch = [];
                 const list = action.payload.items;
                 // console.log('action.payload.items: ', list);
                 for (let i = 0; i < list.length; i++) {

@@ -3,19 +3,19 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 
-export default function HeaderSearch({ value, onChangeText, onSubmitEditing }) {
-    const navigation = useNavigation();
-    console.log(value)
+export default function HeaderSearch({ value, autoFocus, onChangeText, onFocus, onSubmitEditing, onGoBack }) {
+
     return (
         <View style={styles.headerSearch}>
             {/* <AntDesign name="Left" size="32" /> */}
             <AntDesign name="left" size={24} color="black" style={{ marginLeft: -10 }}
-                onPress={() => navigation.goBack()}
+                onPress={onGoBack}
             />
             <TextInput
                 style={{ width: "80%", height: 32, backgroundColor: "#e6e6e6", borderRadius: 4, paddingHorizontal: 10, }}
                 value={value}
-                autoFocus={true}
+                autoFocus={autoFocus}
+                onFocus={onFocus}
                 onChangeText={onChangeText}
                 onSubmitEditing={onSubmitEditing}
                 placeholder="Search Youtube"

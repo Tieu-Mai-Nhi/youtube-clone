@@ -20,7 +20,7 @@ const SearchScreen = ({ navigation }) => {
     const listVideoSearch = useSelector(
         (state) => state.search.listVideoSearch,
     );
-    console.log('video: ', listVideoSearch);
+    // console.log('video: ', listVideoSearch);
 
     const listChannelSearch = useSelector(
         (state) => state.search.listChannelSearch,
@@ -33,11 +33,21 @@ const SearchScreen = ({ navigation }) => {
     );
     // console.log('playlist: ', listPlaylistSearch);
 
+    const handleNavigation = () => {
+        navigation.popToTop();
+    }
 
+    const handleFocus = () => {
+        navigation.goBack();
+    }
 
     return (
         <View style={styles.container}>
-            <HeaderSearch />
+            <HeaderSearch
+                value={keyWord}
+                onGoBack={handleNavigation}
+                onFocus={handleFocus}
+            />
             {/* {loading ? <ActivityIndicator style={{ marginVertical: 10 }} /> : null} */}
 
             <ScrollView>
