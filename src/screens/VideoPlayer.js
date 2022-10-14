@@ -1,10 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import WatchVideo from './WatchVideo'
 
-const VideoPlayer = () => {
+const VideoPlayer = (route) => {
+    // console.log(route);
     return (
         <View>
-            <Text>VideoPlayer</Text>
+            <WatchVideo route={route} />
         </View>
     )
 }

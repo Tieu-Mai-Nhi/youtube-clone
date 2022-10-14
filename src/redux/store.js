@@ -1,8 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { videoSlice } from './videoSlice'
+import channelSlice from './channelSlice';
+import recommendWordSlice from './recommendWordSlice';
+import searchSlice from './searchSlice';
+import videoSlice from './videoSlice';
 
-export const store = configureStore({
+const store = configureStore({
     reducer: {
-        video: videoSlice,
+        video: videoSlice.reducer,
+        channel: channelSlice.reducer,
+        search: searchSlice.reducer,
+        recommendWord: recommendWordSlice.reducer,
     },
 })
+
+export default store;

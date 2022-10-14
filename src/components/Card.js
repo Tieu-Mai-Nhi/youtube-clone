@@ -1,25 +1,78 @@
-import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { useNavigation } from '@react-navigation/native';
+import React, { useEffect } from 'react';
+import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchChannel } from '../redux/channelSlice';
+import { fetchVideo } from '../redux/videoSlice';
 
 const Card = (props) => {
+    const { videoId, channelId } = props;
+    const dispatch = useDispatch();
+    // console.log(videoId);
+    useEffect(() => {
+        dispatch(fetchVideo(videoId));  //dispatch thunk action creator
+    }, []);
+
+    useEffect(() => {
+        dispatch(fetchChannel(channelId));
+    }, [])
+
+    const listVideo = useSelector(
+        (state) => state.video.listVideo,
+    );
+
+    const listChannel = useSelector(
+        (state) => state.channel.listChannel,
+    );
+    // console.log(listChannel);
+
+
+    const video = listVideo.find((item) => item.id === videoId);
+    // console.log(video);
+    const channel = listChannel.find((item) => item.id === channelId);
+
+    // console.log(listVideo);
+    // for (let i = 0; i < listVideo.length - 1; i++) {
+    //     for (let j = i + 1; j < listVideo.length; j++) {
+    //         if (listVideo[i].id === listVideo[j].id) {
+    //             console.log(i, j, listVideo[i]);
+    //         }
+    //     }
+    // }
+    const navigation = useNavigation();
+    // console.log(videoId);
     return (
         <View style={styles.card}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+                navigation.navigate('VideoPlayer', {
+                    videoId: video.id,
+                })
+            }}>
                 <Image
                     style={styles.imageCard}
                     source={{
-                        uri: `https://i.ytimg.com/vi/${props.videoId}/hqdefault.jpg`,
+                        uri: video?.snippet.thumbnails.high.url,
                     }}
                 />
             </TouchableOpacity>
             <View style={styles.timeContainer}>
-                <Text style={styles.time}>15:23</Text>
+                <Text style={styles.time}>{video?.contentDetails.duration}</Text>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', position: 'relative', marginBottom: 20, marginTop: 14 }}>
-                <Image source={require('../../assets/image/fon-devushka-volosy-vzgliad-milaia.jpg')} style={styles.avt} />
+
+                <Image
+                    source={{
+                        uri: channel?.snippet.thumbnails.high.url,
+                    }}
+                    style={styles.avt}
+                />
+
                 <View style={{ flex: 1 }}>
-                    <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">{props.title}</Text>
-                    <Text style={styles.viewer}>19,210,251 viewsJul • 1, 2016</Text>
+                    <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">{video?.snippet.title}</Text>
+                    <View style={{ flexDirection: 'row' }} >
+                        <Text style={styles.viewer}>{video?.statistics.viewCount}views</Text>
+                        <Text style={styles.viewer}>.{video?.snippet.publishedAt}</Text>
+                    </View>
                 </View>
                 <Image source={require('../../assets/icon/More.png')} style={styles.more} />
             </View>
@@ -31,7 +84,7 @@ export default Card
 
 const styles = StyleSheet.create({
     card: {
-        flex: 1
+        // flex: 1
     },
 
     imageCard: {

@@ -30,7 +30,7 @@ const Header = () => {
                         <MaterialCommunityIcons name="bell-outline" size={24} color="black" />
                     </TouchableOpacity>
                     <TouchableOpacity>
-                        <MaterialIcons name="search" size={24} color="black" onPress={() => navigation.navigate('Search')} />
+                        <MaterialIcons name="search" size={24} color="black" onPress={() => navigation.navigate('SubSearch')} />
                     </TouchableOpacity>
                     <TouchableOpacity>
                         <MaterialIcons name="account-circle" size={24} color="black" />
