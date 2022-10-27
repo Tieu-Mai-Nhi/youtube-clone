@@ -6,13 +6,14 @@ const videoSlice = createSlice({
     initialState: {
         status: 'idle',  // lưu trạng thái của request đến api
         popularListVideo: [],
-        // videoId: '',
+        videoId: '',
         // videoSearch: [],
         listVideo: [],
     },
     reducers: {
-        render: (state, action) => {
-            state.videoSearch = action.payload;
+        updatedVideoId: (state, action) => {
+            state.videoId = action.payload;
+            // console.log(action.payload);
         }
     },
     extraReducers: builder => {  // xử lý các logic
@@ -21,12 +22,17 @@ const videoSlice = createSlice({
                 state.status = 'loading';
             })
             .addCase(fetchPopularListVideo.fulfilled, (state, action) => {
-                state.popularListVideo = action.payload.items;                        // giống tạo action, reducer
+                // console.log(state.popularListVideo);
+                // console.log(action.payload.items);                // giống tạo action, reducer
+                state.popularListVideo = action.payload.items;
+                // console.log(state.popularListVideo);
                 state.status = 'idle';
             })
             .addCase(fetchPopularListVideo.rejected, (state, action) => {
                 state.status = 'failed';
             })
+
+
             .addCase(fetchVideo.fulfilled, (state, action) => {
                 // console.log(action.payload.items);
                 state.listVideo = [...state.listVideo, ...action.payload.items];
@@ -45,7 +51,7 @@ export const fetchPopularListVideo = createAsyncThunk('video/fetchPopularListVid
 
 //tạo thunk action , cần nhận vào action obj mới nhất
 export const fetchVideo = createAsyncThunk('video/fetchVideo', async (videoId) => {
-    const listEachVideo = await videoApi.getVideo(videoId);   //videoId? = videoId truyền từ video Popular từ màn Home
+    const listEachVideo = await videoApi.getVideo(videoId);   //videoId? = videoId truyền từ video Popular từ màn Home của component Card khi dispatch
     // console.log(listEachVideo);
     return listEachVideo;
 })

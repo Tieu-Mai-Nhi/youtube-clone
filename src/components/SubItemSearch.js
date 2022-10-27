@@ -3,11 +3,11 @@ import React from 'react'
 import { Feather } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 
-const SubItemSearch = ({ text, onSetText, onNavigationSearch, onSaveWord }) => {
+const SubItemSearch = ({ text, onSetText, onNavigationSearch, onSaveWord, nameIcon }) => {
     return (
         <Pressable style={styles.container} onPress={onNavigationSearch} onPressIn={onSaveWord}>
-            {/* <Feather name="clock" size={24} color="black" /> */}
-            <AntDesign name="search1" size={24} color="black" />
+            {/* <AntDesign name="clockcircleo" size={24} color="black" /> */}
+            <AntDesign name={nameIcon} size={24} color="black" />
 
             <View style={styles.content}>
                 <Text style={styles.text}>{text}</Text>

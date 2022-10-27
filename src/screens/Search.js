@@ -6,7 +6,9 @@ import Card from '../components/Card';
 import ChannelCard from '../components/ChannelCard';
 import HeaderSearch from '../components/HeaderSearch';
 import PlayListCard from '../components/PlayListCard';
+import { channelSliceAction } from '../redux/channelSlice';
 import { fetchSearch } from '../redux/searchSlice';
+import { videoSliceAction } from '../redux/videoSlice';
 
 const SearchScreen = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -39,6 +41,20 @@ const SearchScreen = ({ navigation }) => {
 
     const handleFocus = () => {
         navigation.goBack();
+    }
+
+    const handleNavigationToVideoPlayer = (videoSelected, channelSelected) => {
+        // console.log(videoSelected); //item ở đây = video sau khi find từ màn Card
+        const actionUpdatedVideoId = videoSliceAction.updatedVideoId(videoSelected.id)
+        // console.log(actionUpdatedVideoId);
+        dispatch(actionUpdatedVideoId)
+
+        const actionUpdatedChannelId = channelSliceAction.updatedChannelId(channelSelected.id)
+        // console.log(actionUpdatedChannelId);
+        dispatch(actionUpdatedChannelId)
+
+
+        navigation.navigate('VideoPlayer');
     }
 
     return (
@@ -74,6 +90,7 @@ const SearchScreen = ({ navigation }) => {
                             key={item.id.videoId}
                             videoId={item.id.videoId}
                             channelId={item.snippet.channelId}
+                            handleNavigationToVideoPlayer={handleNavigationToVideoPlayer}
                         />
                     )
                 })}

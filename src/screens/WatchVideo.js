@@ -1,20 +1,44 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { Button, StyleSheet, Text, View } from 'react-native';
 import { WebView } from 'react-native-webview';
 import Constants from 'expo-constants';
 import { useSelector } from 'react-redux';
+import YoutubePlayer from "react-native-youtube-iframe";
 
-const WatchVideo = ({ route }) => {
-    const videoId = route.route.params.videoId;
-    const linkWeb = 'https://www.youtube.com/watch?v=';
+
+const WatchVideo = () => {
+    const videoIdSelected = useSelector(
+        (state) => state.video.videoId
+    );
+
+    const [playing, setPlaying] = useState(false);
+
+    const onStateChange = useCallback((state) => {
+        if (state === "ended") {
+            setPlaying(false);
+            Alert.alert("video has finished playing!");
+        }
+    }, []);
+
+    const togglePlaying = useCallback(() => {
+        setPlaying((prev) => !prev);
+    }, []);
+
     return (
         <View style={styles.container}>
-            <View style={styles.webView}>
+            {/* <View style={styles.webView}>
                 <WebView
                     source={{ uri: `${linkWeb}${videoId}` }}
                     style={{ width: '100%', height: 340 }}
                 />
-            </View>
+            </View> */}
+            <YoutubePlayer
+                height={300}
+                play={playing}
+                videoId={videoIdSelected}
+                onChangeState={onStateChange}
+            />
+            <Button title={playing ? "pause" : "play"} onPress={togglePlaying} />
         </View>
     )
 }

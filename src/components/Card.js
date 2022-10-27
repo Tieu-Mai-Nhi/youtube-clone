@@ -3,14 +3,16 @@ import React, { useEffect } from 'react';
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchChannel } from '../redux/channelSlice';
-import { fetchVideo } from '../redux/videoSlice';
+import { fetchVideo, videoSliceAction } from '../redux/videoSlice';
 
 const Card = (props) => {
-    const { videoId, channelId } = props;
+    const { videoId, channelId, handleNavigationToVideoPlayer } = props;
+    // console.log('videoId: ', videoId);
+    // console.log('channelId: ', channelId);
     const dispatch = useDispatch();
     // console.log(videoId);
     useEffect(() => {
-        dispatch(fetchVideo(videoId));  //dispatch thunk action creator
+        dispatch(fetchVideo(videoId));  //dispatch thunk action creator (để ra listvideo dựa trên id từng video một)
     }, []);
 
     useEffect(() => {
@@ -24,30 +26,27 @@ const Card = (props) => {
     const listChannel = useSelector(
         (state) => state.channel.listChannel,
     );
-    // console.log(listChannel);
+    // console.log("listChannel: ", listChannel);
 
 
     const video = listVideo.find((item) => item.id === videoId);
     // console.log(video);
-    const channel = listChannel.find((item) => item.id === channelId);
+    const channel = listChannel.find((item2) => item2.id === channelId);
+    // console.log(channel);
+    // ---------------  //
+    // dispatch id của từng video để dùng ở các màn khác
+    // useEffect(() => {
+    //     const action = videoSliceAction.updatedVideoId(videoId)
+    //     dispatch(action);
+    // }, [])
 
-    // console.log(listVideo);
-    // for (let i = 0; i < listVideo.length - 1; i++) {
-    //     for (let j = i + 1; j < listVideo.length; j++) {
-    //         if (listVideo[i].id === listVideo[j].id) {
-    //             console.log(i, j, listVideo[i]);
-    //         }
-    //     }
-    // }
+    // ==> không dùng. mà mình click ở màn nào dispatch ở màn đó, tất cả đều dùng chung lên store
+
     const navigation = useNavigation();
     // console.log(videoId);
     return (
         <View style={styles.card}>
-            <TouchableOpacity onPress={() => {
-                navigation.navigate('VideoPlayer', {
-                    videoId: video.id,
-                })
-            }}>
+            <TouchableOpacity onPress={() => handleNavigationToVideoPlayer(video, channel)}>
                 <Image
                     style={styles.imageCard}
                     source={{
@@ -84,7 +83,7 @@ export default Card
 
 const styles = StyleSheet.create({
     card: {
-        // flex: 1
+        marginBottom: 10,
     },
 
     imageCard: {
@@ -101,6 +100,7 @@ const styles = StyleSheet.create({
 
     title: {
         width: Dimensions.get('screen').width - 100,
+        paddingRight: 8,
         color: '#0A0A0A',
         fontWeight: '500',
         marginBottom: 8,
@@ -112,9 +112,11 @@ const styles = StyleSheet.create({
     },
 
     more: {
-        marginHorizontal: 23,
+        marginRight: 6,
+        marginTop: 6,
         position: 'relative',
-        top: -14,
+        // top: -14,
+        alignSelf: 'top'
     },
 
     timeContainer: {

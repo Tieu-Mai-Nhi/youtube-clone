@@ -8,7 +8,7 @@ const recommendWordSlice = createSlice({
         status: 'idle',
         listRecommendWord: [],
     },
-    reducer: {},
+    reducers: {},
     extraReducers: builder => {
         builder
             .addCase(fetchRecommendWord.pending, (state, action) => {

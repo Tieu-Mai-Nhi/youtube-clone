@@ -6,8 +6,14 @@ const channelSlice = createSlice({
     initialState: {
         status: 'idle',
         listChannel: [],
+        channelId: '',
     },
-    reducer: {},
+    reducers: {
+        updatedChannelId: (state, action) => {
+            state.channelId = action.payload;
+            // console.log(action.payload);
+        }
+    },
     extraReducers: builder => {
         builder
             .addCase(fetchChannel.pending, (state, action) => {
