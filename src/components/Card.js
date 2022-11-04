@@ -2,17 +2,18 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useEffect } from 'react';
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { showDurationVideo, showTime, showView } from '../../utils/video';
 import { fetchChannel } from '../redux/channelSlice';
 import { fetchVideo, videoSliceAction } from '../redux/videoSlice';
 
 const Card = (props) => {
+    const screenHeight = Dimensions.get('window').height;
     const { videoId, channelId, handleNavigationToVideoPlayer } = props;
     // console.log('videoId: ', videoId);
     // console.log('channelId: ', channelId);
     const dispatch = useDispatch();
-    // console.log(videoId);
     useEffect(() => {
-        dispatch(fetchVideo(videoId));  //dispatch thunk action creator (để ra listvideo dựa trên id từng video một)
+        dispatch(fetchVideo(videoId));
     }, []);
 
     useEffect(() => {
@@ -33,20 +34,26 @@ const Card = (props) => {
     // console.log(video);
     const channel = listChannel.find((item2) => item2.id === channelId);
     // console.log(channel);
-    // ---------------  //
-    // dispatch id của từng video để dùng ở các màn khác
-    // useEffect(() => {
-    //     const action = videoSliceAction.updatedVideoId(videoId)
-    //     dispatch(action);
-    // }, [])
-
-    // ==> không dùng. mà mình click ở màn nào dispatch ở màn đó, tất cả đều dùng chung lên store
 
     const navigation = useNavigation();
     // console.log(videoId);
+
+
+    // fix syntax
+    const timeDurationString = video?.contentDetails.duration;
+    // console.log(timeDurationString);
+    const viewString = showView(video?.statistics.viewCount);
+    // console.log(viewString);
+    const dateString = showTime(video?.snippet.publishedAt);
+
+    const durationVideo = showDurationVideo(video?.contentDetails.duration);
+
+
     return (
         <View style={styles.card}>
             <TouchableOpacity onPress={() => handleNavigationToVideoPlayer(video, channel)}>
+                {/* click vào 1 video thì nhận được 1 video và 1 channel đó => để truyề sang màn home => màn home dispatch (video và channel này, sau đó .id) => videoplayer useSelector về dùng*/}
+
                 <Image
                     style={styles.imageCard}
                     source={{
@@ -55,7 +62,7 @@ const Card = (props) => {
                 />
             </TouchableOpacity>
             <View style={styles.timeContainer}>
-                <Text style={styles.time}>{video?.contentDetails.duration}</Text>
+                <Text style={styles.time}>{durationVideo}</Text>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', position: 'relative', marginBottom: 20, marginTop: 14 }}>
 
@@ -69,8 +76,8 @@ const Card = (props) => {
                 <View style={{ flex: 1 }}>
                     <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">{video?.snippet.title}</Text>
                     <View style={{ flexDirection: 'row' }} >
-                        <Text style={styles.viewer}>{video?.statistics.viewCount}views</Text>
-                        <Text style={styles.viewer}>.{video?.snippet.publishedAt}</Text>
+                        <Text style={styles.viewer}>{viewString}</Text>
+                        <Text style={styles.viewer}> - {dateString}</Text>
                     </View>
                 </View>
                 <Image source={require('../../assets/icon/More.png')} style={styles.more} />
@@ -122,14 +129,14 @@ const styles = StyleSheet.create({
     timeContainer: {
         backgroundColor: '#000',
         opacity: 0.7,
-        width: 36,
+        width: 44,
         height: 16,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 4,
         position: 'absolute',
         right: 12,
-        bottom: 100,
+        bottom: 120,
     },
 
     time: {

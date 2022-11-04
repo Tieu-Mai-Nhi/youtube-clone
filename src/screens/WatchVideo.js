@@ -1,11 +1,9 @@
 import React, { useCallback, useState } from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
-import { WebView } from 'react-native-webview';
-import Constants from 'expo-constants';
-import { useSelector } from 'react-redux';
+import { Button, StyleSheet, View } from 'react-native';
 import YoutubePlayer from "react-native-youtube-iframe";
+import { useSelector } from 'react-redux';
 
-
+export const heightVideo = 300;
 const WatchVideo = () => {
     const videoIdSelected = useSelector(
         (state) => state.video.videoId
@@ -33,7 +31,7 @@ const WatchVideo = () => {
                 />
             </View> */}
             <YoutubePlayer
-                height={300}
+                height={heightVideo}
                 play={playing}
                 videoId={videoIdSelected}
                 onChangeState={onStateChange}

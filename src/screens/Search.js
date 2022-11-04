@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
-import { useState } from 'react';
-import { ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import BottomSheet, { screenHeight } from '../components/BottomSheet';
 import Card from '../components/Card';
 import ChannelCard from '../components/ChannelCard';
 import HeaderSearch from '../components/HeaderSearch';
@@ -9,6 +9,7 @@ import PlayListCard from '../components/PlayListCard';
 import { channelSliceAction } from '../redux/channelSlice';
 import { fetchSearch } from '../redux/searchSlice';
 import { videoSliceAction } from '../redux/videoSlice';
+
 
 const SearchScreen = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -43,8 +44,10 @@ const SearchScreen = ({ navigation }) => {
         navigation.goBack();
     }
 
+    const ref = useRef(null);
+
     const handleNavigationToVideoPlayer = (videoSelected, channelSelected) => {
-        // console.log(videoSelected); //item ở đây = video sau khi find từ màn Card
+        console.log(videoSelected); //item ở đây = video sau khi find từ màn Card
         const actionUpdatedVideoId = videoSliceAction.updatedVideoId(videoSelected.id)
         // console.log(actionUpdatedVideoId);
         dispatch(actionUpdatedVideoId)
@@ -52,17 +55,18 @@ const SearchScreen = ({ navigation }) => {
         const actionUpdatedChannelId = channelSliceAction.updatedChannelId(channelSelected.id)
         // console.log(actionUpdatedChannelId);
         dispatch(actionUpdatedChannelId)
-
-
-        navigation.navigate('VideoPlayer');
+        // navigation.navigate('VideoPlayer');
+        // // hàm mở bottomSheet
+        ref?.current?.scrollTo(-screenHeight)
+        // console.log(ref.current);
     }
 
     return (
         <View style={styles.container}>
             <HeaderSearch
-                value={keyWord}
+                value={keyWord} //vẫn hiện keyword ở ô input
                 onGoBack={handleNavigation}
-                onFocus={handleFocus}
+                onFocus={handleFocus}  // focus vào lùi về
             />
             {/* {loading ? <ActivityIndicator style={{ marginVertical: 10 }} /> : null} */}
 
@@ -95,6 +99,8 @@ const SearchScreen = ({ navigation }) => {
                     )
                 })}
             </ScrollView>
+
+            <BottomSheet ref={ref} />
         </View>
     )
 }
@@ -104,5 +110,6 @@ export default SearchScreen
 const styles = StyleSheet.create({
     container: {
         backgroundColor: "#fff",
+        flex: 1,
     }
 })

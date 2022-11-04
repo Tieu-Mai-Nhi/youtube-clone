@@ -1,66 +1,98 @@
-import { Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native'
-import React from 'react'
-import { StatusBar } from 'expo-status-bar'
-import { AntDesign } from '@expo/vector-icons';
-import Animated, { useAnimatedGestureHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
-import { PanGestureHandler } from 'react-native-gesture-handler';
+import React, { forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
+import { Dimensions, StyleSheet } from 'react-native';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import VideoPlayer from '../screens/VideoPlayer';
 
-const SPRING_CONFIG = {
-    damping: 80,
-    overshootClamping: true,
-    restDisplacementThreshold: 0.1,
-    stiffness: 500,
-}
 
-const BottomSheet = () => {
-    const height = useWindowDimensions().height;
-    const topAnimataion = useSharedValue(height);
-    const animationStyle = useAnimatedStyle(() => {
-        const top = topAnimataion.value;
+// console.log(screenHeight)
+export const screenHeight = Dimensions.get('window').height;
+const BottomSheet = forwardRef(({ }, ref) => {
+
+    const refVideoPlayer = useRef(null);
+    const translateY = useSharedValue(0);
+    const context = useSharedValue({ y: 0 }); // lưu trữ vị trí trc đó, để kéo lần sau nó không reset giật lại vị trí ban đầu
+
+    const scrollTo = useCallback((heighPosition) => {
+        'worklet';
+        // console.log("A", heighPosition);
+        translateY.value = withSpring(heighPosition, { damping: 50 })
+    }, []);
+
+    useImperativeHandle(ref, () => ({ scrollTo }));
+
+    const dragThresHold = -(screenHeight - screenHeight / 8);  // -780
+
+    const gesture = Gesture.Pan()
+        .onStart(() => {
+            context.value = { y: translateY.value }
+            console.log('vị trí dừng lần trước: ', context.value);
+        })
+
+        .onUpdate((event) => {
+            translateY.value = event.translationY + context.value.y;
+            console.log('di chuyển: ', event.translationY);
+            console.log('vị trí dừng hiện tại: ', translateY.value);
+            // console.log('ngưỡng trên: ', dragThresHold);
+            translateY.value = Math.max(translateY.value, -screenHeight)  // kéo max đi lên: nên là số âm
+            // translateY.value = Math.min(translateY.value, screenHeight - 100) // kéo max đi xuống: nên là dương
+            //set giá trị cực trị,  cuộn cao nhất, cho cuộn tối đa đến khi chạm vào cạnh trên = màn hình
+        })
+        // cuộn lên/xuống
+        .onEnd(() => {
+
+            if (translateY.value < dragThresHold) {
+                scrollTo(-screenHeight)
+            } else if (translateY.value > dragThresHold) {
+                scrollTo(-200)
+            }
+        })
+
+
+    // animation
+    const bottomSheetStyle = useAnimatedStyle(() => {
+        // hiệu ứng border
+        // const borderRadius = interpolate(
+        //     translateY.value,
+        //     [-screenHeight + 50 + 30, -screenHeight + 50],   // nếu translate y di chuyển đến vị trí + 30 thì nó =25 -> về 0 thì nó = 5
+        //     [25, 5],
+        //     Extrapolate.CLAMP // chặn không cho vượt ra ngoài biên
+        // )
+
         return {
-            top,
+            // borderRadius: borderRadius,
+            transform: [{ translateY: translateY.value }] //dịch chuyển
         };
     });
 
-    const gestureHandler = useAnimatedGestureHandler({
-        onStart: (_, context) => {
-
-        }
-    })
-
-
-
-
     return (
-        <>
-            <PanGestureHandler onGestureEvent={gestureHandler}>
-                <Animated.View style={[styles.container, animationStyle]}>
-                    <StatusBar hidden={true} />
-                    <Pressable onPress={() => {
-                        top.value = withSpring(
-                            height / 4 * 3,
-                            SPRING_CONFIG
-                        );
-                    }}>
-                        <AntDesign name="down" size={24} color="black" />
-                    </Pressable>
-                    <Text>BottomSheet</Text>
-                </Animated.View>
-            </PanGestureHandler>
-        </>
+        <GestureDetector gesture={gesture}>
+            <Animated.View style={[styles.bottomSheetContainer, bottomSheetStyle]}>
+                <VideoPlayer />
+            </Animated.View>
+        </GestureDetector>
     )
-}
-
-
-export default BottomSheet
-
+})
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: 'black',
+    bottomSheetContainer: {
+        // borderRadius: 25,
+        height: screenHeight,
+        top: screenHeight,  //vị trí đầu tiên
+        flex: 1,
+        backgroundColor: 'white',
         position: 'absolute',
-        top: 0,
         left: 0,
         right: 0,
-        bottom: 0,
-    }
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        zIndex: 100
+    },
 })
+
+export default BottomSheet

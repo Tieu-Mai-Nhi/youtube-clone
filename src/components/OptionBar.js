@@ -1,26 +1,31 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const OptionBar = ({ like, dislike }) => {
-    const [likeStatus, setLikeStatus] = useState(false)
-    const [likeCount, setLikeCount] = useState(Number(like))
+    // console.log('like: ', like);
+    useEffect(() => {
+    }, [like])
+    // setLikeCount(like);
+    // console.log('likeCount: ', likeCount);
 
+    const [likeCount, setLikeCount] = useState(like)
+    const [disLikeCount, setDisLikeCount] = useState(dislike)
+    const [likeStatus, setLikeStatus] = useState(false)
     const [disLikeStatus, setDisLikeStatus] = useState(false)
-    const [disLikeCount, setDisLikeCount] = useState(Number(dislike))
     // console.log(typeof like);
     // console.log(likeCount);
 
     const handleClickLike = () => {
-        likeStatus === false ? setLikeCount(likeCount + 1) : setLikeCount(likeCount - 1);
+        likeStatus === false ? setLikeCount((likeCount + 1)) : setLikeCount((likeCount - 1));
         setLikeStatus(!likeStatus)
     }
 
     const handleClickDisLike = () => {
-        disLikeStatus === false ? setDisLikeCount(disLikeCount + 1) : setDisLikeCount(disLikeCount - 1);
+        disLikeStatus === false ? setDisLikeCount((disLikeCount + 1)) : setDisLikeCount((disLikeCount - 1));
         setDisLikeStatus(!disLikeStatus)
     }
 
@@ -32,12 +37,12 @@ const OptionBar = ({ like, dislike }) => {
                     ?
                     <>
                         <AntDesign name="like2" size={24} color="black" />
-                        <Text>{likeCount}</Text>
+                        <Text>{like}</Text>
                     </>
                     :
                     <>
                         <AntDesign name="like1" size={24} color="black" />
-                        <Text>{likeCount}</Text>
+                        <Text>{like}</Text>
                     </>
                 }
             </TouchableOpacity>
@@ -48,12 +53,12 @@ const OptionBar = ({ like, dislike }) => {
                     ?
                     <>
                         <AntDesign name="dislike2" size={24} color="black" />
-                        <Text>{disLikeCount}</Text>
+                        <Text>{dislike}</Text>
                     </>
                     :
                     <>
                         <AntDesign name="dislike1" size={24} color="black" />
-                        <Text>{disLikeCount}</Text>
+                        <Text>{dislike}</Text>
                     </>
                 }
             </TouchableOpacity>

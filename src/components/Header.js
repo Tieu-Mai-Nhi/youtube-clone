@@ -9,8 +9,8 @@ const Header = () => {
     const navigation = useNavigation();
 
     return (
-        <SafeAreaView style={styles.header}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <SafeAreaView>
+            <View style={styles.header}>
                 <TouchableOpacity>
                     <Image
                         style={styles.logo}
@@ -19,20 +19,20 @@ const Header = () => {
                 </TouchableOpacity>
 
 
-                <View style={{ flexDirection: "row", alignItems: "center", justifyContent: 'space-between', flex: 0.5 }}>
-                    <TouchableOpacity>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <TouchableOpacity style={styles.icon}>
                         <Image
                             style={styles.connectedTv}
                             source={require('../../assets/icon/mayquay.png')}
                         />
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity style={styles.icon}>
                         <MaterialCommunityIcons name="bell-outline" size={24} color="black" />
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity style={styles.icon}>
                         <MaterialIcons name="search" size={24} color="black" onPress={() => navigation.navigate('SubSearch')} />
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity style={styles.icon}>
                         <MaterialIcons name="account-circle" size={24} color="black" />
                     </TouchableOpacity>
                 </View>
@@ -40,9 +40,13 @@ const Header = () => {
 
             <View
                 style={{
-                    borderBottomWidth: 1,
-                    borderBottomColor: '#CECECE',
-                    marginTop: 16,
+                    borderColor: '#cfcfcf',
+                    opacity: 0.6,
+                    borderWidth: 0.6,
+                    width: '80%',
+                    alignSelf: 'center',
+                    // marginTop: 16,
+                    marginBottom: 16
                 }}
             />
         </SafeAreaView >
@@ -53,17 +57,30 @@ export default Header;
 
 const styles = StyleSheet.create({
     header: {
-        marginTop: Constants.statusBarHeight,
-        justifyContent: 'center',
-        paddingHorizontal: 12,
+        // height: Constants.statusBarHeight,
+        alignItems: 'center',
+        paddingHorizontal: 14,
         paddingVertical: 10,
+        paddingTop: 20,
+        marginBottom: 10,
+        marginRight: 40,
+        flexDirection: "row",
+        justifyContent: "space-between"
     },
 
+    logo: {
+        marginRight: 80,
+
+    },
     text: {
         fontSize: 22
     },
 
     connectedTv: {
         marginRight: 6,
+    },
+
+    icon: {
+        paddingHorizontal: 6
     }
 })

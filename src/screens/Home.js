@@ -1,25 +1,16 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import React, { useRef, useState } from 'react'
-import { useEffect } from 'react'
-import { FlatList, StatusBar, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useRef } from 'react'
+import { Dimensions, FlatList, StyleSheet, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
+import BottomSheet from '../components/BottomSheet'
 import Card from '../components/Card'
 import Header from '../components/Header'
+import { channelSliceAction } from '../redux/channelSlice'
 import { historyWordSliceAction } from '../redux/historyWordSlice'
 import { fetchPopularListVideo, videoSliceAction } from '../redux/videoSlice'
-import { channelSliceAction } from '../redux/channelSlice'
 
 const Home = ({ navigation }) => {
-
-    // ----------------------------------------------------------------
-    const bottomSheetRef = React.useRef(null);
-    const [open, isOpen] = useState(true);
-    const snapPoints = ['100%', '75%']
-
-
-    //--------------------------------//
-
+    const screenHeight = Dimensions.get('window').height;
     const dispatch = useDispatch()
     const popularListVideo = useSelector(
         (state) => state.video.popularListVideo,
@@ -29,6 +20,8 @@ const Home = ({ navigation }) => {
         dispatch(fetchPopularListVideo());   // mới chỉ dispatch thunk action creator, cần dispatch 1 action thực sự sau xử lý ở thunk action nếu muốn custom payload/dữ liệu trước khi nó đc chuyển đến reducer ở store
     }, [])
 
+
+    // dùng màn này ban đầu vào load app, lấy về luôn lịch sử tìm kiếm trên async, gửi list word lịch sử lên kho => để lấy ra ở màn subscreen
     useEffect(() => {
         handleGetWord()
     }, [])
@@ -46,6 +39,8 @@ const Home = ({ navigation }) => {
         }
     }
 
+    const ref = useRef(null);
+
     const handleNavigationToVideoPlayer = (videoSelected, channelSelected) => {
         // console.log(videoSelected); //item ở đây = video sau khi find từ màn Card
         const actionUpdatedVideoId = videoSliceAction.updatedVideoId(videoSelected.id)
@@ -55,10 +50,11 @@ const Home = ({ navigation }) => {
         const actionUpdatedChannelId = channelSliceAction.updatedChannelId(channelSelected.id)
         // console.log(actionUpdatedChannelId);
         dispatch(actionUpdatedChannelId)
-
-
-        navigation.navigate('VideoPlayer');
+        // navigation.navigate('VideoPlayer');
+        // hàm mở bottomSheet
+        ref?.current?.scrollTo(-screenHeight)
     }
+
 
     // console.log(status)
     const renderItemListVideo = ({ item }) => {
@@ -74,23 +70,13 @@ const Home = ({ navigation }) => {
 
     return (
         <View>
-            {/* <StatusBar barStyle="dark-content" hidden={true} backgroundColor="#00BCD4" translucent={true} /> */}
             <Header />
             <FlatList
                 data={popularListVideo}
                 renderItem={renderItemListVideo}
                 keyExtractor={item => item.id}
             />
-
-            {/* <BottomSheet
-                ref={bottomSheetRef}
-                snapPoints={snapPoints}
-                enablePanDownToClose={true}
-            >
-                <BottomSheetView>
-                    <Text style={{ color: 'blue', fontSize: 28, backgroundColor: 'orange', width: '100%', textAlign: 'center' }}>Hellorr</Text>
-                </BottomSheetView>
-            </BottomSheet> */}
+            <BottomSheet ref={ref} />
         </View>
     )
 }

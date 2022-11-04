@@ -1,19 +1,25 @@
-import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect } from 'react'
-import WatchVideo from './WatchVideo'
+import React, { useEffect, useRef } from 'react'
+import { ScrollView, StyleSheet, View } from 'react-native'
+import { decay } from 'react-native-reanimated'
 import { useDispatch, useSelector } from 'react-redux'
+import { showLike, showSubscribe, showTime, showView } from '../../utils/video'
+import { screenHeight } from '../components/BottomSheet'
+import BottomSheetComment, { bottomSheetHeight } from '../components/BottomSheetComment'
+import BottomSheetInfor from '../components/BottomSheetInfor'
 import Card from '../components/Card'
-import InforVideo from '../components/InforVideo'
-import OptionBar from '../components/OptionBar'
 import Channel from '../components/Channel'
 import Comment from '../components/Comment'
+import InforVideo from '../components/InforVideo'
+import OptionBar from '../components/OptionBar'
+import { channelSliceAction } from '../redux/channelSlice'
 import { fetchListComments } from '../redux/commentSlice'
 import { fetchRelatedVideo } from '../redux/relatedVideoSlice'
 import { videoSliceAction } from '../redux/videoSlice'
-import { channelSliceAction } from '../redux/channelSlice'
+import WatchVideo from './WatchVideo'
 
 
 const VideoPlayer = ({ navigation }) => {
+
     const dispatch = useDispatch()
     const popularListVideo = useSelector(
         (state) => state.video.popularListVideo,
@@ -23,7 +29,6 @@ const VideoPlayer = ({ navigation }) => {
         (state) => state.video.listVideo,
     );
     // console.log(listVideo);
-    // ==> đây là list video lẻ
 
     const listChannel = useSelector(
         (state) => state.channel.listChannel,
@@ -49,11 +54,11 @@ const VideoPlayer = ({ navigation }) => {
     useEffect(() => {
         dispatch(fetchListComments(videoIdSelected));
         // console.log(fetchListComments(videoIdSelected));
-        // console.log("1");
     }, [videoIdSelected])
 
     useEffect(() => {
         dispatch(fetchRelatedVideo(videoIdSelected));
+        // console.log((fetchRelatedVideo(videoIdSelected)));
     }, [videoIdSelected]);
 
     const listComments = useSelector(
@@ -64,15 +69,7 @@ const VideoPlayer = ({ navigation }) => {
     const listRelatedVideo = useSelector(
         (state) => state.relatedVideo.listRelatedVideo
     )
-    console.log(listRelatedVideo);
-
-    const handleShowMoreInformation = () => {
-
-    }
-
-    const handleShowMoreComment = () => {
-
-    }
+    // console.log(listRelatedVideo);
 
     const renderItemListVideo = ({ item }) => {
         // console.log(item);
@@ -93,28 +90,57 @@ const VideoPlayer = ({ navigation }) => {
         const actionUpdatedChannelId = channelSliceAction.updatedChannelId(channelSelected.id)
         // console.log(actionUpdatedChannelId);
         dispatch(actionUpdatedChannelId)
-        navigation.navigate('VideoPlayer');
+        // navigation.navigate('VideoPlayer');
+
+        // onShowBottomSheet
+        console.log('red: ', ref?.current?.scrollTo(-screenHeight));
+        ref?.current?.scrollTo(-screenHeight)
+    }
+
+    const views = showView(videoSelected?.statistics.viewCount)
+    const timeDimensions = showTime(videoSelected?.snippet.publishedAt)
+
+    const likes = Number(showLike(videoSelected?.statistics.likeCount));
+    // console.log(likes);
+    const subscribed = showSubscribe(channelSelected?.statistics.subscriberCount)
+    const dateVideo = new Date(videoSelected?.snippet.publishedAt);
+    const day = dateVideo.getDate();
+    const month = dateVideo.getMonth() + 1;
+    const year = dateVideo.getFullYear();
+    const descVideo = videoSelected?.snippet.description;
+    // console.log(descVideo);
+
+    const ref = useRef(null);
+    const refInfor = useRef(null);
+    const refComment = useRef(null);
+
+    const handleShowMoreInformation = () => {
+        refInfor?.current?.scrollTo(-bottomSheetHeight - 80)
+    }
+
+    const handleShowMoreComment = () => {
+        refComment?.current?.scrollTo(-bottomSheetHeight - 80)
     }
 
     return (
         <View>
             <WatchVideo />
-            <ScrollView style={{ marginTop: 226, paddingHorizontal: 16 }}>
+            <ScrollView style={{ marginTop: 230, paddingHorizontal: 16, backgroundColor: 'white' }}>
                 <InforVideo
-                    title={videoSelected.snippet.title}
-                    view={videoSelected.statistics.viewCount}
-                    time={videoSelected.contentDetails.dimension}
-                    tag={videoSelected.snippet.tags}
-                    onMoreInfomation={handleShowMoreInformation}
+                    title={videoSelected?.snippet.title}
+                    view={views}
+                    time={timeDimensions}
+                    tag={videoSelected?.snippet.tags}
+                    onMoreInformation={handleShowMoreInformation}
                 />
                 <OptionBar
-                    like={videoSelected.statistics.likeCount}
-                    dislike={videoSelected.statistics.commentCount}
+                    like={likes}
+                    dislike={Number(videoSelected?.statistics.commentCount)}
                 />
                 <Channel
-                    avt={channelSelected.snippet.thumbnails.high.url}
-                    channelName={channelSelected.snippet.title}
-                    subscribed={channelSelected.statistics.subscriberCount}
+                    avt={channelSelected?.snippet.thumbnails.high.url}
+                    channelName={channelSelected?.snippet.title}
+                    subscribed={subscribed}
                 />
                 <Comment
                     numberComments={'108'}
@@ -135,13 +161,19 @@ const VideoPlayer = ({ navigation }) => {
                     );
                 })}
             </ScrollView>
-
-            {/* <FlatList
-                data={popularListVideo}
-                renderItem={renderItemListVideo}
-                keyExtractor={item => item.id}
-            /> */}
-
+            <BottomSheetComment ref={refComment} />
+            <BottomSheetInfor
+                ref={refInfor}
+                title={videoSelected?.snippet.title}
+                avatar={channelSelected?.snippet.thumbnails.high.url}
+                nameChannel={channelSelected?.snippet.title}
+                like={likes}
+                desc={descVideo}
+                view={videoSelected?.statistics.viewCount}
+                day={day}
+                month={month}
+                year={year}
+            />
         </View>
     )
 }

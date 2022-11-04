@@ -22,7 +22,7 @@ const Channel = ({ avt, channelName, subscribed }) => {
                 <Image style={styles.img} source={{ uri: avt }} />
                 <View style={{ marginLeft: 10 }}>
                     <Text style={styles.nameChannel}>{channelName}</Text>
-                    <Text style={styles.subcribe}>{subscribed} subscribe</Text>
+                    <Text style={styles.subcribe}>{subscribed}</Text>
                 </View>
             </View>
             <View>

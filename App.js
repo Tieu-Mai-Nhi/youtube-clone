@@ -7,6 +7,8 @@ import store from "./src/redux/store";
 import Search from "./src/screens/Search";
 import SubScreen from "./src/screens/SubScreen";
 import VideoPlayer from "./src/screens/VideoPlayer";
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
+
 
 
 const Stack = createNativeStackNavigator();
@@ -14,22 +16,23 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <Provider store={store}>
-      <SafeAreaView style={styles.container}>
-        <StatusBar barStyle="dark-content" hidden={false} backgroundColor="#00BCD4" translucent={true} />
-        <NavigationContainer>
-          <Stack.Navigator
-            initialRouteName="Navigation"
-            screenOptions={{
-              headerShown: false,
-            }}
-          >
-            <Stack.Screen name="Navigation" component={Navigation} />
-            <Stack.Screen name="Search" component={Search} />
-            <Stack.Screen name="SubSearch" component={SubScreen} />
-            <Stack.Screen name="VideoPlayer" component={VideoPlayer} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </SafeAreaView>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <SafeAreaView style={styles.container}>
+          <StatusBar barStyle="dark-content" hidden={false} backgroundColor="#00BCD4" translucent={true} />
+          <NavigationContainer>
+            <Stack.Navigator
+              initialRouteName="Navigation"
+              screenOptions={{
+                headerShown: false,
+              }}
+            >
+              <Stack.Screen name="Navigation" component={Navigation} />
+              <Stack.Screen name="Search" component={Search} />
+              <Stack.Screen name="SubSearch" component={SubScreen} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </SafeAreaView>
+      </GestureHandlerRootView>
     </Provider>
   );
 }

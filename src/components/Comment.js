@@ -3,10 +3,10 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons';
 
 
-const Comment = ({ comment, avtUser, numberComments }) => {
+const Comment = ({ comment, avtUser, numberComments, onShowMoreComment }) => {
     // console.log(avtUser);
     return (
-        <View style={{ marginBottom: 16 }}>
+        <TouchableOpacity style={{ marginBottom: 16 }} onPress={onShowMoreComment}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <TouchableOpacity style={{ flexDirection: 'row' }}>
                     <Text style={{ marginRight: 6 }}>Comments</Text>
@@ -20,7 +20,7 @@ const Comment = ({ comment, avtUser, numberComments }) => {
                 <Image source={{ uri: avtUser }} style={{ width: 26, height: 26, borderRadius: "50%", marginRight: 10 }} />
                 <Text style={{ paddingLeft: 6, paddingRight: 14 }}>{comment}</Text>
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 

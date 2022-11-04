@@ -1,7 +1,6 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import color from '../constant/color'
 import { FontAwesome } from '@expo/vector-icons';
+import React from 'react';
+import { Image, StyleSheet, Text, View } from 'react-native';
 
 export default function ChannelCard({ channelId, url, channelTitle }) {
     return (

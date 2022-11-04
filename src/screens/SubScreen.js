@@ -14,14 +14,17 @@ export default function SubScreen({ navigation }) {
     const [text, setText] = useState('');
 
     // console.log(text);
+
+
     const handleChangeText = (text) => {
         setText(text);
     }
+    // => lấy được text nhập ở headerSearch
 
     // ============== Xử lý sự kiện Search
     const handleSearchVideo = () => {
         const action = searchSliceAction.updateKeyWord(text);
-        // gửi dữ liệu text được yêu cầu search = keyWord lên store
+        // gửi dữ liệu text được yêu cầu search = keyWord lên store để dùng ở màn search, search ra video playlist
         // console.log(action);
         dispatch(action);
         navigation.navigate('Search');
@@ -30,7 +33,6 @@ export default function SubScreen({ navigation }) {
     }
 
     // save Key word
-
     const handleNavigationSearch = (item) => {
         setText(item);
         const action = searchSliceAction.updateKeyWord(item);
@@ -47,17 +49,16 @@ export default function SubScreen({ navigation }) {
         dispatch(fetchRecommendWord(text))   // gửi dữ liệu text gợi ý lên kho
     }, [text])
 
+
     const handleSetText = (item) => {
         setText(item)
     }
-
-
+    // text = item
 
     const listRecommendWord = useSelector(
         (state) => state.recommendWord.listRecommendWord
     )
     console.log(listRecommendWord);    // lấy được từ gợi ý trên store từ thư viện api
-
 
     // ==============
 
@@ -65,13 +66,17 @@ export default function SubScreen({ navigation }) {
         navigation.goBack()
     }
 
+
+
     const historyListWord = useSelector(
         (state) => state.historyWord.historyListWord
     )
     console.log(historyListWord);
 
-    // save keyWord
 
+
+    // save keyWord
+    // save word vào lịch sử khi ấn vào item
     const handleSaveWordItem = async (item) => {
         console.log(item)
         let updatedKeyWord = [];
@@ -96,6 +101,7 @@ export default function SubScreen({ navigation }) {
         }
     };
 
+    // save Word vào lịch sử khi nộp ở ô input
     const saveWordInput = async () => {
         console.log(text);
         let updatedKeyWord = [];
@@ -120,29 +126,17 @@ export default function SubScreen({ navigation }) {
     return (
         <View>
             <HeaderSearch
-                value={text}    // text = keyword
+                value={text}
+                // text = keyword: hiện nguyên ở ô input
                 onSearch={handleSearchVideo}
                 onSubmitEditing={handleSearchVideo}
+                // cả ấn item search và nhập enter đều chung 1 func => gửi keyword
                 onChangeText={handleChangeText}
                 onGoBack={handleNavigation}
                 autoFocus={true} />
             <ScrollView>
-                {(listRecommendWord.length != 0) ?
-                    historyListWord.map((item, index) => {
-                        console.log(listRecommendWord);
-                        return (
-                            <SubItemSearch  // đây là component chứa đồng hồ và các thẻ thời gian
-                                key={index}
-                                text={item}   // truyền từ gợi ý xuống component con SubItemSearch là các ô để làm giao diện
-                                onSetText={() => handleSetText(item)}  // cập nhật text ở ô gợi ý lên ô search input
-                                onNavigationSearch={() => handleNavigationSearch(item)}  // ==> nhận được text để thực hiện search và chuyển hướng trang
-                                onSaveWord={() => handleSaveWordItem(item)}
-                                nameIcon='clockcircleo'
-                            />
-                        )
-                    })
-
-                    : listRecommendWord.map((item, index) => {
+                {
+                    listRecommendWord.map((item, index) => {
                         return (
                             <SubItemSearch  // đây là component chứa đồng hồ và các thẻ thời gian
                                 key={index}
@@ -154,6 +148,24 @@ export default function SubScreen({ navigation }) {
                             />
                         )
                     })
+                    // &&
+                    // (listRecommendWord.length != 0) ?
+                    // historyListWord.map((item, index) => {
+                    //     // console.log(listRecommendWord);
+                    //     return (
+                    //         <SubItemSearch  // đây là component chứa đồng hồ và các thẻ thời gian
+                    //             key={index}
+                    //             text={item}   // truyền từ gợi ý xuống component con SubItemSearch là các ô để làm giao diện
+                    //             onSetText={() => handleSetText(item)}  // cập nhật text ở ô gợi ý lên ô search input
+                    //             onNavigationSearch={() => handleNavigationSearch(item)}  // ==> nhận được text để thực hiện search và chuyển hướng trang
+                    //             onSaveWord={() => handleSaveWordItem(item)}
+                    //             nameIcon='clockcircleo'
+                    //         />
+                    //     )
+                    // })
+
+                    // :
+
                 }
             </ScrollView>
         </View>

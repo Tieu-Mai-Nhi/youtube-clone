@@ -4,7 +4,7 @@ const key2 = "AIzaSyDVIZiQf6Mw1kYoqNoCaKMh6K_JYgRomeQ";
 
 const searchApi = {
     get(keyWord) {
-        const url = `/search?part=snippet&maxResults=10&q=${keyWord}&key=${key2}`;
+        const url = `/search?part=snippet&maxResults=10&q=${keyWord}&key=${key}`;
         // console.log(url);
         return axiosClient.get(url)
     }

@@ -1,65 +1,64 @@
-import { Text } from 'react-native';
+import moment from "moment/moment";
 
-export const renderTextWithBreakLines = (text) => {
-    return text?.split(`\n`).map((txt, i) => (
-        <Text key={i}>
-            {txt}
-            {'\n'}
-        </Text>
-    ));
-};
+export const showTime = (dateString) => {
+    let newDate = new Date(dateString);
+    let nowDate = new Date();
+    const divideYear = 1000 * 60 * 60 * 24 * 30 * 12;
+    const divideMonth = 1000 * 60 * 60 * 24 * 30;
+    const divideDay = 1000 * 60 * 60 * 24;
+    const divideHour = 1000 * 60 * 60;
+    const divideMinute = 1000 * 60;
 
-export const showTime = (date) => {
-    let timeString;
-    let datePublicVideo = new Date(date);
-    let dateNow = new Date();
-    let time = dateNow - datePublicVideo;
-    if (time > 31104000000) {
-        timeString =
-            Math.floor(time / 1000 / 60 / 60 / 24 / 30 / 12) + ' năm trước';
-    } else if (time > 2592000000) {
-        timeString =
-            Math.floor(time / 1000 / 60 / 60 / 24 / 30) + ' tháng trước';
-    } else if (time > 86400000) {
-        timeString = Math.floor(time / 1000 / 60 / 60 / 24) + ' ngày trước';
-    } else if (time > 3600000) {
-        timeString = Math.floor(time / 1000 / 60 / 60) + ' giờ trước';
-    } else if (time > 60000) {
-        timeString = ' vài phút trước';
+    let durationTime = nowDate.getTime() - newDate.getTime();
+
+    if (durationTime > divideYear) {
+        durationTime = Math.floor(durationTime / divideYear) + ' năm trước'
+    } else if (durationTime > divideMonth) {
+        durationTime = Math.floor(durationTime / divideMonth) + ' tháng trước'
+    } else if (durationTime > divideDay) {
+        durationTime = Math.floor(durationTime / divideDay) + ' ngày trước'
+    } else if (durationTime > divideHour) {
+        durationTime = Math.floor(durationTime / divideHour) + ' giờ trước'
+    } else if (durationTime > divideMinute) {
+        durationTime = Math.floor(durationTime / divideMinute) + ' phút trước'
     }
-    return timeString;
-};
+    // console.log(durationTime);
+    return durationTime;
+}
 
 export const showView = (view) => {
     let viewString;
     if (view > 1000000) {
-        viewString = (view / 1000000).toFixed(1) + ' Tr' + ' lượt xem';
+        viewString = (view / 1000000).toFixed(1) + 'M' + ' views';
     } else if (view > 1000) {
-        viewString = (view / 1000).toFixed(0) + ' N' + ' lượt xem';
+        viewString = (view / 1000).toFixed(1) + 'K' + ' views';
     }
     return viewString;
-};
+}
 
 export const showLike = (like) => {
-    let likeString;
-    if (like > 1000000) {
-        likeString = (like / 1000000).toFixed(0) + ' Tr';
-    } else if (like > 10000) {
-        likeString = (like / 10000).toFixed(0) + ' N';
-    } else if (like > 1000) {
-        likeString = (like / 1000).toFixed(1) + ' N';
-    }
+    let likeString = like;
+    // if (like > 1000000) {
+    //     likeString = (like / 1000000).toFixed(0) + 'M';
+    // } else if (like > 10000) {
+    //     likeString = (like / 10000).toFixed(0) + 'K';
+    // } else if (like > 1000) {
+    //     likeString = (like / 1000).toFixed(1) + 'K';
+    // } else {
+    //     likeString = like;
+    // }
+    // console.log(likeString);
     return likeString;
 };
 
 export const showSubscribe = (sub) => {
     let subString;
     if (sub > 10000000) {
-        subString = (sub / 1000000).toFixed(1) + ' Tr subscribe';
+        subString = (sub / 1000000).toFixed(1) + 'M subscribe';
     } else if (sub > 1000000) {
-        subString = (sub / 1000000).toFixed(2) + ' Tr subscribe';
+        subString = (sub / 1000000).toFixed(2) + 'M subscribe';
     } else if (sub > 1000) {
-        subString = (sub / 1000).toFixed(0) + ' N subscribe';
+        subString = (sub / 1000).toFixed(0) + 'K subscribe';
     }
     return subString;
 };
@@ -67,87 +66,47 @@ export const showSubscribe = (sub) => {
 export const showComment = (comment) => {
     let commentString;
     if (comment > 1000000) {
-        commentString = (comment / 1000000).toFixed(1) + ' Tr';
+        commentString = (comment / 1000000).toFixed(1) + 'M';
     } else if (comment > 1000) {
-        commentString = (comment / 1000).toFixed(0) + ' N';
+        commentString = (comment / 1000).toFixed(0) + 'N';
     } else {
         commentString = comment;
     }
     return commentString;
 };
 
-export const YTDurationToSeconds = (duration) => {
-    if (duration === 'P0D') {
-        duration = 'PT0S';
-    } else if (duration === 'P2DT8H46M15S') {
-        duration = 'PT2D8H46M15S';
-    } else if (duration === 'P1DT5H37M5S') {
-        duration = 'PT1D5H37M5S';
-    }
-    let match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
-    match = match.slice(1).map(function (x) {
-        if (x != null) {
-            return x.replace(/\D/, '');
-        }
-    });
-
-    let hours = parseInt(match[0]) || 0;
-    let minutes = parseInt(match[1]) || 0;
-    let seconds = parseInt(match[2]) || 0;
-
-    return hours * 3600 + minutes * 60 + seconds;
-};
-
-export const showTimeVideo = (time) => {
+// thời lượng video
+export const showDurationVideo = (time) => {
+    let durationVideo = moment.duration(time).asSeconds();
     let hours;
     let minutes;
     let seconds;
-    let timeVideo;
-    if (time > 3600) {
-        hours = Math.floor(time / 3600);
-        minutes = Math.floor((time % 3600) / 60);
-        seconds = Math.floor((time % 3600) % 60);
+    // console.log(typeof durationVideo);
+    if (durationVideo > 3600) {
+        hours = Math.floor(durationVideo / 3600);
+        minutes = Math.floor((durationVideo % 3600) / 60);
+        seconds = Math.floor((durationVideo % 3600) % 60);
         if (minutes < 10 && seconds > 10) {
-            timeVideo = `${hours}:0${minutes}:${seconds}`;
+            durationVideo = `${hours}:0${minutes}:${seconds}`;
         } else if (minutes > 10 && seconds < 10) {
-            timeVideo = `${hours}:${minutes}:0${seconds}`;
+            durationVideo = `${hours}:${minutes}:0${seconds}`;
         } else if (minutes < 10 && seconds < 10) {
-            timeVideo = `${hours}:0${minutes}:0${seconds}`;
+            durationVideo = `${hours}:0${minutes}:0${seconds}`;
         } else {
-            timeVideo = `${hours}:${minutes}:${seconds}`;
+            durationVideo = `${hours}:${minutes}:${seconds}`;
         }
-    } else if (time > 60) {
-        minutes = Math.floor((time % 3600) / 60);
-        seconds = Math.floor((time % 3600) % 60);
+    } else if (durationVideo > 60) {
+        minutes = Math.floor((durationVideo % 3600) / 60);
+        seconds = Math.floor((durationVideo % 3600) % 60);
         if (seconds > 10) {
-            timeVideo = `${minutes}:${seconds}`;
+            durationVideo = `${minutes}:${seconds}`;
         } else {
-            timeVideo = `${minutes}:0${seconds}`;
+            durationVideo = `${minutes}:0${seconds}`;
         }
-    } else {
-        seconds = Math.floor((time % 3600) % 60);
-        timeVideo = `0:${seconds}`;
     }
-    return timeVideo;
-};
-
-export const showDate = (date) => {
-    let dateVideo;
-    let datePublicVideo = new Date(date);
-    let dateNow = new Date();
-    let time = dateNow - datePublicVideo;
-    if (time > 31104000000) {
-        dateVideo =
-            Math.floor(time / 1000 / 60 / 60 / 24 / 30 / 12) + ' năm trước';
-    } else if (time > 2592000000) {
-        dateVideo =
-            Math.floor(time / 1000 / 60 / 60 / 24 / 30) + ' tháng trước';
-    } else if (time > 86400000) {
-        dateVideo = Math.floor(time / 1000 / 60 / 60 / 24) + ' ngày trước';
-    } else if (time > 3600000) {
-        dateVideo = Math.floor(time / 1000 / 60 / 60) + ' giờ trước';
-    } else if (time > 60000) {
-        dateVideo = ' vài phút trước';
+    else {
+        let time = `0:${durationVideo}`
+        durationVideo = time;
     }
-    return dateVideo;
-};
+    return durationVideo;
+}

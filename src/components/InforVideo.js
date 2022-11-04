@@ -1,25 +1,19 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { useSelector } from 'react-redux';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { MaterialIcons } from '@expo/vector-icons';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const InforVideo = ({ title, view, time, tag, onMoreInfomation }) => {
-
-
-    const videoIdSelected = useSelector(
-        (state) => state.video.videoId
-    );
-
+const InforVideo = ({ title, view, time, tag, onMoreInformation }) => {
+    // console.log('time: ', time);
 
     return (
-        <TouchableOpacity style={styles.container} onPress={onMoreInfomation}>
+        <TouchableOpacity style={styles.container} onPress={onMoreInformation}>
             <View style={styles.left}>
                 <Text numberOfLines={2} style={styles.title}>
                     {title}
                 </Text>
                 <Text style={styles.desc}>
-                    {view} views - {time}
+                    {view} - {time}
                 </Text>
             </View>
             <View>
