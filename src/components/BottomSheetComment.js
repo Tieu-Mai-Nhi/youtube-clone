@@ -50,31 +50,33 @@ const BottomSheetComment = forwardRef(({ }, ref) => {
 
     useImperativeHandle(ref, () => ({ scrollTo }), [scrollTo])
 
+    const dragThresHold = -(screenHeight / 5 * 3);  // -780
+    // dùng screenHeight vì nó cố định, dùng bottomcomment và chi tiết, size thay đổi theo nội dung
+    // console.log(dragThresHold);
+    const MAX_TRANSLATE_Y = -(screenHeight - heightVideo + 80);
+
     const gesture = Gesture.Pan()
         .onStart(() => {
             context.value = { y: translateY.value }
-            console.log('vị trí dừng lần trước: ', context.value);
+            // console.log('vị trí dừng lần trước: ', context.value);
         })
 
         .onUpdate((event) => {
             translateY.value = event.translationY + context.value.y;
             // console.log('quãng đường di chuyển: ', event.translationY);
 
-            console.log('vị trí dừng cuối cùng: ', translateY.value);
+            // console.log('vị trí dừng cuối cùng: ', translateY.value);
 
             translateY.value = Math.max(translateY.value, MAX_TRANSLATE_Y) // khoảng kéo lên max
-            // translateY.value = Math.min(translateY.value, screenHeight - 100) //set giá trị cực trị,  cuộn cao nhất, cho cuộn tối đa đến khi chạm vào cạnh trên = màn hình
         })
 
         .onEnd(() => {
-            if (translateY.value < -bottomSheetHeight / 1.5) {
+            if (translateY.value < dragThresHold) {
                 scrollTo(MAX_TRANSLATE_Y)
             } else {
                 scrollTo(0)
             }
         })
-
-    const MAX_TRANSLATE_Y = -(screenHeight - heightVideo + 80);
 
     const bottomSheetStyle = useAnimatedStyle(() => {
         return {

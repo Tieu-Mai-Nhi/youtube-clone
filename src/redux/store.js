@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
+import bottomSheetSlice from './bottomSheetSlice';
 import channelSlice from './channelSlice';
 import commentSlice from './commentSlice';
 import historyWordSlice from './historyWordSlice';
@@ -16,6 +17,7 @@ const store = configureStore({
         historyWord: historyWordSlice.reducer,
         comment: commentSlice.reducer,
         relatedVideo: relatedVideoSlice.reducer,
+        bottomSheet: bottomSheetSlice.reducer,
     },
 })
 

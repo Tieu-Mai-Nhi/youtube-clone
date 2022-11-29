@@ -21,10 +21,6 @@ import WatchVideo from './WatchVideo'
 const VideoPlayer = ({ navigation }) => {
 
     const dispatch = useDispatch()
-    const popularListVideo = useSelector(
-        (state) => state.video.popularListVideo,
-    );
-
     const listVideo = useSelector(
         (state) => state.video.listVideo,
     );
@@ -37,8 +33,7 @@ const VideoPlayer = ({ navigation }) => {
     const videoIdSelected = useSelector(
         (state) => state.video.videoId,
     )
-    // console.log(videoIdSelected)
-    // ; ==> id của video đc chọn => sau đó dùng list.find => dữ liệu video đc chọn
+    // ==> id của video đc chọn => sau đó dùng list.find => dữ liệu video đc chọn
 
     const channelIdSelected = useSelector(
         (state) => state.channel.channelId,
@@ -101,6 +96,7 @@ const VideoPlayer = ({ navigation }) => {
     const timeDimensions = showTime(videoSelected?.snippet.publishedAt)
 
     const likes = Number(showLike(videoSelected?.statistics.likeCount));
+
     // console.log(likes);
     const subscribed = showSubscribe(channelSelected?.statistics.subscriberCount)
     const dateVideo = new Date(videoSelected?.snippet.publishedAt);
@@ -108,7 +104,6 @@ const VideoPlayer = ({ navigation }) => {
     const month = dateVideo.getMonth() + 1;
     const year = dateVideo.getFullYear();
     const descVideo = videoSelected?.snippet.description;
-    // console.log(descVideo);
 
     const ref = useRef(null);
     const refInfor = useRef(null);

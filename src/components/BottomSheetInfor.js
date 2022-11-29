@@ -12,6 +12,7 @@ import { showLike, showTime } from '../../utils/video';
 
 const screenHeight = Dimensions.get('window').height;
 const MAX_TRANSLATE_Y = -(screenHeight - heightVideo + 80);
+// console.log(MAX_TRANSLATE_Y);
 export const bottomSheetHeight = screenHeight - heightVideo;
 const BottomSheetComment = forwardRef(({ title, avatar, nameChannel, like, desc, view, day, month, year }, ref) => {
 
@@ -25,10 +26,15 @@ const BottomSheetComment = forwardRef(({ title, avatar, nameChannel, like, desc,
 
     useImperativeHandle(ref, () => ({ scrollTo }), [scrollTo])
 
+    const dragThresHold = -(screenHeight / 5 * 3);  // -780
+    // dùng screenHeight vì nó cố định, dùng bottomcomment và chi tiết, size thay đổi theo nội dung
+    // console.log(dragThresHold);
+
+
     const gesture = Gesture.Pan()
         .onStart(() => {
             context.value = { y: translateY.value }
-            console.log('vị trí dừng lần trước: ', context.value);
+            // console.log('vị trí dừng lần trước: ', context.value);
         })
 
         .onUpdate((event) => {
@@ -38,13 +44,12 @@ const BottomSheetComment = forwardRef(({ title, avatar, nameChannel, like, desc,
             console.log('vị trí dừng cuối cùng: ', translateY.value);
 
             translateY.value = Math.max(translateY.value, MAX_TRANSLATE_Y) // khoảng kéo lên max
-            // translateY.value = Math.min(translateY.value, screenHeight - 100) //set giá trị cực trị,  cuộn cao nhất, cho cuộn tối đa đến khi chạm vào cạnh trên = màn hình
         })
 
         .onEnd(() => {
-            if (translateY.value < -bottomSheetHeight / 1.5) {
+            if (translateY.value < dragThresHold) {
                 scrollTo(MAX_TRANSLATE_Y)
-            } else {
+            } else if (translateY.value > dragThresHold) {
                 scrollTo(0)
             }
         })

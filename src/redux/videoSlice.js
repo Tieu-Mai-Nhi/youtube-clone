@@ -23,7 +23,7 @@ const videoSlice = createSlice({
             })
             .addCase(fetchPopularListVideo.fulfilled, (state, action) => {
                 // console.log(state.popularListVideo);
-                // console.log(action.payload.items);                // giống tạo action, reducer
+                // giống tạo action, reducer
                 state.popularListVideo = action.payload.items;
                 // console.log(state.popularListVideo);
                 state.status = 'idle';

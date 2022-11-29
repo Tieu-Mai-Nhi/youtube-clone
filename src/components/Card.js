@@ -4,16 +4,16 @@ import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'rea
 import { useDispatch, useSelector } from 'react-redux';
 import { showDurationVideo, showTime, showView } from '../../utils/video';
 import { fetchChannel } from '../redux/channelSlice';
-import { fetchVideo, videoSliceAction } from '../redux/videoSlice';
+import { fetchVideo } from '../redux/videoSlice';
 
 const Card = (props) => {
     const screenHeight = Dimensions.get('window').height;
     const { videoId, channelId, handleNavigationToVideoPlayer } = props;
-    // console.log('videoId: ', videoId);
-    // console.log('channelId: ', channelId);
+    // videoId, channelId đi theo cả list nên phải dùng find để lọc ra, thành từng cái lẻ sẽ có nhiều props hơn
+
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(fetchVideo(videoId));
+        dispatch(fetchVideo(videoId)); // call api lấy về list video là từng video lẻ
     }, []);
 
     useEffect(() => {
@@ -22,22 +22,18 @@ const Card = (props) => {
 
     const listVideo = useSelector(
         (state) => state.video.listVideo,
+        console.log(listVideo)
     );
 
     const listChannel = useSelector(
         (state) => state.channel.listChannel,
     );
-    // console.log("listChannel: ", listChannel);
-
 
     const video = listVideo.find((item) => item.id === videoId);
     // console.log(video);
+
     const channel = listChannel.find((item2) => item2.id === channelId);
     // console.log(channel);
-
-    const navigation = useNavigation();
-    // console.log(videoId);
-
 
     // fix syntax
     const timeDurationString = video?.contentDetails.duration;
@@ -52,7 +48,7 @@ const Card = (props) => {
     return (
         <View style={styles.card}>
             <TouchableOpacity onPress={() => handleNavigationToVideoPlayer(video, channel)}>
-                {/* click vào 1 video thì nhận được 1 video và 1 channel đó => để truyề sang màn home => màn home dispatch (video và channel này, sau đó .id) => videoplayer useSelector về dùng*/}
+                {/* click vào 1 video thì nhận được 1 video và 1 channel đó => để truyền sang màn home => màn home dispatch (video và channel này, sau đó .id) => videoplayer useSelector về dùng*/}
 
                 <Image
                     style={styles.imageCard}
@@ -65,7 +61,6 @@ const Card = (props) => {
                 <Text style={styles.time}>{durationVideo}</Text>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', position: 'relative', marginBottom: 20, marginTop: 14 }}>
-
                 <Image
                     source={{
                         uri: channel?.snippet.thumbnails.high.url,
@@ -123,7 +118,7 @@ const styles = StyleSheet.create({
         marginTop: 6,
         position: 'relative',
         // top: -14,
-        alignSelf: 'top'
+        alignSelf: 'top',
     },
 
     timeContainer: {

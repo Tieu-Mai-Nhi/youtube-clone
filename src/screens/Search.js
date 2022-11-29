@@ -43,9 +43,7 @@ const SearchScreen = ({ navigation }) => {
     const handleFocus = () => {
         navigation.goBack();
     }
-
     const ref = useRef(null);
-
     const handleNavigationToVideoPlayer = (videoSelected, channelSelected) => {
         console.log(videoSelected); //item ở đây = video sau khi find từ màn Card
         const actionUpdatedVideoId = videoSliceAction.updatedVideoId(videoSelected.id)
@@ -55,10 +53,9 @@ const SearchScreen = ({ navigation }) => {
         const actionUpdatedChannelId = channelSliceAction.updatedChannelId(channelSelected.id)
         // console.log(actionUpdatedChannelId);
         dispatch(actionUpdatedChannelId)
-        // navigation.navigate('VideoPlayer');
+
         // // hàm mở bottomSheet
         ref?.current?.scrollTo(-screenHeight)
-        // console.log(ref.current);
     }
 
     return (

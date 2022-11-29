@@ -1,68 +1,26 @@
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import React from 'react'
-import Home from '../screens/Home'
-import Library from '../screens/Library'
-import Shorts from '../screens/Shorts'
-import Subscriptions from '../screens/Subscriptions'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Image } from 'react-native'
+import SearchScreen from '../screens/Search';
+import SubScreen from '../screens/SubScreen';
+import SignUp from '../screens/SignUp';
+import BottomTabNavigator from './BottomTabNavigator'
 
-const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 export default function Navigation() {
     return (
-        <Tab.Navigator
-            initialRouteName='Home'
-            inactiveColor="black"
-            screenOptions={{
-                tabBarActiveTintColor: '#000',
-                // tabBarInactiveTintColor: '#ccc',
-                headerShown: false,
-            }}
-        >
-            <Tab.Screen name="Home" component={Home}
-                options={{
-                    tabBarIcon: ({ focused }) => {
-                        if (focused) {
-                            return (<Image source={require("../../assets/icon/home-ac.png")} />)
-                        } else {
-                            return (<Image source={require("../../assets/icon/home.png")} />)
-                        }
-                    }
+        <NavigationContainer>
+            <Stack.Navigator
+                initialRouteName="Navigation"
+                screenOptions={{
+                    headerShown: false,
                 }}
-            />
-            <Tab.Screen name="Shorts" component={Shorts}
-                options={{
-                    tabBarIcon: ({ focused }) => {
-                        if (focused) {
-                            return (<Image source={require("../../assets/icon/Shorts-ac.png")} />)
-                        } else {
-                            return (<Image source={require("../../assets/icon/Shorts.png")} />)
-                        }
-                    }
-                }}
-            />
-            <Tab.Screen name="Subscriptions" component={Subscriptions}
-                options={{
-                    tabBarBadge: "",
-                    tabBarIcon: ({ focused }) => {
-                        if (focused) {
-                            return (<Image source={require("../../assets/icon/subs-ac.png")} />)
-                        } else {
-                            return (<Image source={require("../../assets/icon/subs.png")} />)
-                        }
-                    }
-                }}
-            />
-            <Tab.Screen name="Library" component={Library}
-                options={{
-                    tabBarIcon: ({ focused }) => {
-                        if (focused) {
-                            return (<Image source={require("../../assets/icon/library-ac.png")} />)
-                        } else {
-                            return (<Image source={require("../../assets/icon/library.png")} />)
-                        }
-                    }
-                }}
-            />
-        </Tab.Navigator>
+            >
+                <Stack.Screen name="Navigation" component={BottomTabNavigator} />
+                <Stack.Screen name="Search" component={SearchScreen} />
+                <Stack.Screen name="SubSearch" component={SubScreen} />
+                <Stack.Screen name="SignUp" component={SignUp} />
+            </Stack.Navigator>
+        </NavigationContainer>
     )
 }

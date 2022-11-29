@@ -17,7 +17,7 @@ const Comment = ({ comment, avtUser, numberComments, onShowMoreComment }) => {
                 </TouchableOpacity>
             </View>
             <View style={{ flexDirection: 'row', marginTop: 12, marginRight: 10 }}>
-                <Image source={{ uri: avtUser }} style={{ width: 26, height: 26, borderRadius: "50%", marginRight: 10 }} />
+                <Image source={{ uri: avtUser }} style={{ width: 26, height: 26, borderRadius: 13, marginRight: 10 }} />
                 <Text style={{ paddingLeft: 6, paddingRight: 14 }}>{comment}</Text>
             </View>
         </TouchableOpacity>

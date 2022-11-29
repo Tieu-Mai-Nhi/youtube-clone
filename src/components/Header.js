@@ -1,6 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import Constants from 'expo-constants';
 import React from 'react';
 import { Image, SafeAreaView, StyleSheet, TouchableOpacity, View } from 'react-native';
 
@@ -17,7 +16,6 @@ const Header = () => {
                         source={require('../../assets/icon/logo.png')}
                     />
                 </TouchableOpacity>
-
 
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                     <TouchableOpacity style={styles.icon}>
@@ -57,7 +55,6 @@ export default Header;
 
 const styles = StyleSheet.create({
     header: {
-        // height: Constants.statusBarHeight,
         alignItems: 'center',
         paddingHorizontal: 14,
         paddingVertical: 10,

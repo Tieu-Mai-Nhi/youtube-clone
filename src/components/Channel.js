@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     img: {
         width: 36,
         height: 36,
-        borderRadius: '50%',
+        borderRadius: 36 / 2,
     },
     nameChannel: {
         fontWeight: 'bold',

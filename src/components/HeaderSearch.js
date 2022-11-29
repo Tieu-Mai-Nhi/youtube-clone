@@ -1,9 +1,8 @@
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 
-export default function HeaderSearch({ value, autoFocus, onChangeText, onFocus, onSubmitEditing, onGoBack }) {
+const HeaderSearch = ({ value, autoFocus, onChangeText, onFocus, onSubmitEditing, onGoBack }) => {
 
     return (
         <View style={styles.headerSearch}>
@@ -21,13 +20,14 @@ export default function HeaderSearch({ value, autoFocus, onChangeText, onFocus, 
                 placeholder="Search Youtube"
             />
             <MaterialCommunityIcons name="microphone" size={24} color="black" />
-            {/* <Ionicons name="send-sharp" size={20} color="black" onPress={onSearch} /> */}
         </View>
     )
 }
+
+export default HeaderSearch;
+
 const styles = StyleSheet.create({
     headerSearch: {
-        // flex: 1,
         alignItems: "center",
         justifyContent: 'center',
         paddingHorizontal: 12,
